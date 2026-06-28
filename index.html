@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <title>FreeFormOX</title>
+  <link id="bootstrap-theme-css" href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/solar/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <script>const BUILD_NUMBER = "202606271016";</script>
+</head>
+<body>
+
+  <nav id="mainNav" class="navbar navbar-expand px-3 py-2">
+    <button class="btn p-1" onclick="openSettings()" title="Settings">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
+        <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z"/>
+      </svg>
+    </button>
+  </nav>
+
+  <div class="container-fluid px-3">
+
+    <div id="mainContent">
+      <div id="turnIndicator">X to go</div>
+      <div id="buttonGrid" class="grid-container"></div>
+      <div id="gameBtns" class="d-flex gap-2 mt-3 w-100 d-none" style="max-width:min(calc(100vw - 3rem), calc(100dvh - 200px))">
+        <button class="btn btn-primary flex-fill" onclick="resetGame()">Replay</button>
+        <button class="btn btn-outline-secondary flex-fill" onclick="swapPlayers(); resetGame()">Swap Players</button>
+      </div>
+    </div>
+
+    <div id="settingsPage" class="d-none">
+      <h2 class="mb-3">Settings</h2>
+
+      <div class="d-flex gap-2 mb-3">
+        <button class="btn btn-success editor-btn btn-wide ms-auto" onclick="closeSettings()">Done</button>
+      </div>
+
+      <div class="row mb-3 align-items-center col-md-8">
+        <div class="col-4 text-end"><label class="form-label mb-0">Theme</label></div>
+        <div class="col-8">
+          <select id="themeSelector" class="form-select" onchange="changeTheme(this.value)">
+            <option value="brite">Brite (light)</option>
+            <option value="cerulean">Cerulean (light)</option>
+            <option value="cosmo">Cosmo (light)</option>
+            <option value="cyborg">Cyborg (dark)</option>
+            <option value="darkly">Darkly (dark)</option>
+            <option value="flatly">Flatly (light)</option>
+            <option value="journal">Journal (light)</option>
+            <option value="litera">Litera (light)</option>
+            <option value="lumen">Lumen (light)</option>
+            <option value="lux">Lux (light)</option>
+            <option value="materia">Materia (light)</option>
+            <option value="minty">Minty (light)</option>
+            <option value="morph">Morph (light)</option>
+            <option value="pulse">Pulse (light)</option>
+            <option value="quartz">Quartz (light)</option>
+            <option value="sandstone">Sandstone (light)</option>
+            <option value="simplex">Simplex (light)</option>
+            <option value="sketchy">Sketchy (light)</option>
+            <option value="slate">Slate (dark)</option>
+            <option value="solar" selected>Solar (dark)</option>
+            <option value="spacelab">Spacelab (light)</option>
+            <option value="superhero">Superhero (dark)</option>
+            <option value="united">United (light)</option>
+            <option value="vapor">Vapor (dark)</option>
+            <option value="yeti">Yeti (light)</option>
+            <option value="zephyr">Zephyr (light)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row mb-3 align-items-center col-md-8">
+        <div class="col-4 text-end"><label class="form-label mb-0">X name</label></div>
+        <div class="col-8">
+          <input id="xName" class="form-control" type="text" maxlength="20" onchange="saveName('x', this.value)">
+        </div>
+      </div>
+      <div class="row mb-3 align-items-center col-md-8">
+        <div class="col-4 text-end"><label class="form-label mb-0">X style</label></div>
+        <div class="col-8">
+          <select id="xPieceStyle" class="form-select" onchange="changePieceStyle('x', this.value)">
+            <option value="classic">Classic</option>
+            <option value="dino">Dino</option>
+            <option value="unicorn">Unicorn</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row mb-3 align-items-center col-md-8">
+        <div class="col-4 text-end"><label class="form-label mb-0">O name</label></div>
+        <div class="col-8">
+          <input id="oName" class="form-control" type="text" maxlength="20" onchange="saveName('o', this.value)">
+        </div>
+      </div>
+      <div class="row mb-3 align-items-center col-md-8">
+        <div class="col-4 text-end"><label class="form-label mb-0">O style</label></div>
+        <div class="col-8">
+          <select id="oPieceStyle" class="form-select" onchange="changePieceStyle('o', this.value)">
+            <option value="classic">Classic</option>
+            <option value="dino">Dino</option>
+            <option value="unicorn">Unicorn</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row mb-4 align-items-center col-md-8">
+        <div class="col-4 text-end"></div>
+        <div class="col-8">
+          <button class="btn btn-primary w-100" onclick="swapPlayers()">Swap Players</button>
+        </div>
+      </div>
+
+      <div class="mt-4 row align-items-center col-md-8">
+        <div class="col-4 text-end"></div>
+        <div class="col-8">
+          <a href="https://buymeacoffee.com/ownimage" target="_blank" rel="noopener">
+            <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height:50px">
+          </a>
+        </div>
+      </div>
+
+      <div class="mt-4 row align-items-center col-md-8">
+        <div class="col-4 text-end"><label class="form-label mb-0">Share app</label></div>
+        <div class="col-8">
+          <div id="shareQrCode" style="background:white;padding:10px;display:inline-block;border-radius:8px;"></div>
+        </div>
+      </div>
+
+      <div class="mt-5 small build-number">Build <span id="buildNumber"></span></div>
+    </div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <script src="js/settings.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
