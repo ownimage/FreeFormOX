@@ -153,20 +153,17 @@ function updateGameButtons() {
   const undoBtn = document.getElementById("undoBtn");
   const redoBtn = document.getElementById("redoBtn");
 
-  if (!setting) {
-    playBtns.classList.add("invisible");
-    endBtns.classList.add("invisible");
-    return;
-  }
-
   if (gameOver) {
     playBtns.classList.add("invisible");
     endBtns.classList.remove("invisible");
-  } else {
+  } else if (setting) {
     playBtns.classList.remove("invisible");
     endBtns.classList.add("invisible");
     undoBtn.classList.toggle("invisible", moveHistory.length === 0);
     redoBtn.classList.toggle("invisible", redoStack.length === 0);
+  } else {
+    playBtns.classList.add("invisible");
+    endBtns.classList.add("invisible");
   }
 }
 
