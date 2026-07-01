@@ -24,9 +24,15 @@
     <div id="mainContent">
       <div id="turnIndicator">X to go</div>
       <div id="buttonGrid" class="grid-container"></div>
-      <div id="gameBtns" class="d-flex gap-2 mt-3 w-100 d-none" style="max-width:min(calc(100vw - 3rem), calc(100dvh - 200px))">
-        <button class="btn btn-primary flex-fill" onclick="resetGame()">Replay</button>
-        <button class="btn btn-outline-secondary flex-fill" onclick="swapPlayers(); resetGame()">Swap Players &amp; Replay</button>
+      <div id="gameBtnContainer" class="mt-3">
+        <div id="playBtns" class="btn-pair invisible">
+          <button id="undoBtn" class="btn btn-outline-info" onclick="undoMove()">Undo</button>
+          <button id="redoBtn" class="btn btn-outline-info" onclick="redoMove()">Redo</button>
+        </div>
+        <div id="endBtns" class="btn-pair invisible">
+          <button id="replayBtn" class="btn btn-primary" onclick="resetGame()">Replay</button>
+          <button id="swapBtn" class="btn btn-outline-secondary" onclick="swapPlayers(); resetGame()">Swap Players &amp; Replay</button>
+        </div>
       </div>
     </div>
 
@@ -108,11 +114,20 @@
       <div class="row mb-4 align-items-center col-md-8">
         <div class="col-4 text-end"></div>
         <div class="col-8">
-          <button class="btn btn-primary w-100" onclick="swapPlayers()">Swap Players &amp; Replay</button>
+          <button class="btn btn-primary w-100" onclick="swapPlayers(); resetGame()">Swap Players &amp; Restart</button>
         </div>
       </div>
 
-      <div class="mt-4 row align-items-center col-md-8">
+      <div class="row mb-3 align-items-center col-md-8">
+        <div class="col-4 text-end"><label class="form-label mb-0">Show play &amp; replay buttons</label></div>
+        <div class="col-8">
+          <div class="form-check form-switch" style="padding-left:2.5em">
+            <input id="showPlayReplay" class="form-check-input" type="checkbox" role="switch" onchange="savePlayReplaySetting(this.checked)" checked>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-2 row align-items-center col-md-8">
         <div class="col-4 text-end"></div>
         <div class="col-8">
           <a href="https://buymeacoffee.com/ownimage" target="_blank" rel="noopener">
