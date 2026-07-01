@@ -165,8 +165,8 @@ function updateGameButtons() {
   } else {
     playBtns.classList.remove("invisible");
     endBtns.classList.add("invisible");
-    undoBtn.disabled = moveHistory.length === 0;
-    redoBtn.disabled = redoStack.length === 0;
+    undoBtn.classList.toggle("invisible", moveHistory.length === 0);
+    redoBtn.classList.toggle("invisible", redoStack.length === 0);
   }
 }
 
