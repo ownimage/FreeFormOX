@@ -67,6 +67,10 @@ function openSettings() {
     if (styleSel) styleSel.value = localStorage.getItem("ffox_" + s + "PieceStyle") || "classic";
   });
 
+  const showPlayReplay = localStorage.getItem("ffox_showGameButtons");
+  const toggle = document.getElementById("showPlayReplay");
+  if (toggle) toggle.checked = showPlayReplay !== "false";
+
   try {
     const qrContainer = document.getElementById("shareQrCode");
     if (qrContainer && typeof QRCode !== "undefined") {
@@ -111,9 +115,15 @@ function saveName(symbol, value) {
   localStorage.setItem("ffox_" + symbol + "Name", value);
 }
 
+function savePlayReplaySetting(checked) {
+  localStorage.setItem("ffox_showGameButtons", checked);
+}
+
 function closeSettings() {
   document.getElementById("settingsPage").classList.add("d-none");
   document.getElementById("mainContent").classList.remove("d-none");
+  refreshPieces();
+  updateGameButtons();
 }
 
 document.addEventListener("DOMContentLoaded", () => {

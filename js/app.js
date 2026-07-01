@@ -1,5 +1,7 @@
 let currentPlayer = "X";
 let gameOver = false;
+let moveHistory = [];
+let redoStack = [];
 
 const SVG = {
   X: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><line x1="17" y1="20" x2="83" y2="80" stroke="#d63031" stroke-width="15" stroke-linecap="round"/><line x1="83" y1="20" x2="17" y2="80" stroke="#d63031" stroke-width="15" stroke-linecap="round"/></svg>',
@@ -62,6 +64,21 @@ function updateAvailability() {
       btn.innerHTML = "";
       btn.className = "cell-unavailable";
     }
+  }
+}
+
+function recalcAvailability() {
+  const cells = document.getElementById("buttonGrid").children;
+  const placed = getPlaced();
+  for (const btn of cells) {
+    if (btn.dataset.player) continue;
+    if (+btn.dataset.index === 13) continue;
+    btn.disabled = false;
+    btn.className = "cell-available";
+    btn.innerHTML = "";
+  }
+  if (placed.length > 0) {
+    updateAvailability();
   }
 }
 
@@ -129,10 +146,34 @@ function refreshPieces() {
   }
 }
 
+function updateGameButtons() {
+  const setting = localStorage.getItem("ffox_showGameButtons") !== "false";
+  const playBtns = document.getElementById("playBtns");
+  const endBtns = document.getElementById("endBtns");
+  const undoBtn = document.getElementById("undoBtn");
+  const redoBtn = document.getElementById("redoBtn");
+
+  if (!setting) {
+    playBtns.classList.add("invisible");
+    endBtns.classList.add("invisible");
+    return;
+  }
+
+  if (gameOver) {
+    playBtns.classList.add("invisible");
+    endBtns.classList.remove("invisible");
+  } else {
+    playBtns.classList.remove("invisible");
+    endBtns.classList.add("invisible");
+    undoBtn.classList.toggle("invisible", moveHistory.length === 0);
+    redoBtn.classList.toggle("invisible", redoStack.length === 0);
+  }
+}
+
 function endGame(msg, line) {
   gameOver = true;
   document.getElementById("turnIndicator").innerHTML = msg;
-  document.getElementById("gameBtns").classList.remove("d-none");
+  updateGameButtons();
   if (line) {
     const cells = document.getElementById("buttonGrid").children;
     for (const i of line) cells[i - 1].classList.add("cell-winner");
@@ -159,9 +200,11 @@ function resetGame() {
     }
   }
   document.getElementById("turnIndicator").innerHTML = playerIcon("X") + " " + getPlayerName("X") + " to go";
-  document.getElementById("gameBtns").classList.add("d-none");
+  moveHistory = [];
+  redoStack = [];
   currentPlayer = "X";
   gameOver = false;
+  updateGameButtons();
 }
 
 function buildGrid() {
@@ -190,6 +233,8 @@ function handleClick(btn) {
   btn.dataset.player = player;
   btn.disabled = true;
   btn.className = "cell-placed";
+  moveHistory.push({ index: +btn.dataset.index, player: player });
+  redoStack = [];
   currentPlayer = currentPlayer === "X" ? "O" : "X";
   document.getElementById("turnIndicator").innerHTML = playerIcon(currentPlayer) + " " + getPlayerName(currentPlayer) + " to go";
   updateAvailability();
@@ -198,12 +243,57 @@ function handleClick(btn) {
     endGame(playerIcon(player) + " " + getPlayerName(player) + " wins!", winning);
   } else if (checkDraw()) {
     endGame("Draw!");
+  } else {
+    updateGameButtons();
+  }
+}
+
+function undoMove() {
+  if (moveHistory.length === 0) return;
+  const move = moveHistory.pop();
+  redoStack.push(move);
+  const cell = document.getElementById("buttonGrid").children[move.index - 1];
+  delete cell.dataset.player;
+  cell.innerHTML = "";
+  cell.disabled = false;
+  const cells = document.getElementById("buttonGrid").children;
+  for (const btn of cells) btn.classList.remove("cell-winner");
+  currentPlayer = move.player;
+  gameOver = false;
+  recalcAvailability();
+  document.getElementById("turnIndicator").innerHTML = playerIcon(currentPlayer) + " " + getPlayerName(currentPlayer) + " to go";
+  updateGameButtons();
+}
+
+function redoMove() {
+  if (redoStack.length === 0) return;
+  const move = redoStack.pop();
+  moveHistory.push(move);
+  const cell = document.getElementById("buttonGrid").children[move.index - 1];
+  cell.innerHTML = getPieceHtml(move.player);
+  cell.dataset.player = move.player;
+  cell.disabled = true;
+  cell.className = "cell-placed";
+  const cells = document.getElementById("buttonGrid").children;
+  for (const btn of cells) btn.classList.remove("cell-winner");
+  currentPlayer = move.player === "X" ? "O" : "X";
+  gameOver = false;
+  recalcAvailability();
+  const winning = checkWin(move.player);
+  if (winning) {
+    endGame(playerIcon(move.player) + " " + getPlayerName(move.player) + " wins!", winning);
+  } else if (checkDraw()) {
+    endGame("Draw!");
+  } else {
+    document.getElementById("turnIndicator").innerHTML = playerIcon(currentPlayer) + " " + getPlayerName(currentPlayer) + " to go";
+    updateGameButtons();
   }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   buildGrid();
   document.getElementById("turnIndicator").innerHTML = playerIcon("X") + " " + getPlayerName("X") + " to go";
+  updateGameButtons();
   if (screen.orientation && typeof screen.orientation.lock === "function") {
     screen.orientation.lock("portrait").catch(() => {});
   }
