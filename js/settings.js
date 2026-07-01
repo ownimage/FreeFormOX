@@ -114,6 +114,7 @@ function saveName(symbol, value) {
 function closeSettings() {
   document.getElementById("settingsPage").classList.add("d-none");
   document.getElementById("mainContent").classList.remove("d-none");
+  refreshPieces();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
