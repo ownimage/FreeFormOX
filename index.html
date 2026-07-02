@@ -3,7 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#1a1a2e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>FreeFormOX</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="img/icon.svg">
+  <link rel="apple-touch-icon" href="img/icon.svg">
   <link id="bootstrap-theme-css" href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/solar/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
   <script>const BUILD_NUMBER = "2026067011648";</script>
@@ -153,6 +159,11 @@
   <script>
   document.write('<script src="js/settings.js?v=' + BUILD_NUMBER + '"><\/script>');
   document.write('<script src="js/app.js?v=' + BUILD_NUMBER + '"><\/script>');
+  </script>
+  <script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("js/sw.js?v=" + BUILD_NUMBER, { scope: "/" });
+  }
   </script>
 
 </body>
