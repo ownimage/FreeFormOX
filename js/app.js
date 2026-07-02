@@ -3,11 +3,6 @@ let gameOver = false;
 let moveHistory = [];
 let redoStack = [];
 
-const SVG = {
-  X: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><line x1="17" y1="20" x2="83" y2="80" stroke="#d63031" stroke-width="15" stroke-linecap="round"/><line x1="83" y1="20" x2="17" y2="80" stroke="#d63031" stroke-width="15" stroke-linecap="round"/></svg>',
-  O: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><ellipse cx="50" cy="50" rx="37" ry="35" fill="none" stroke="#0984e3" stroke-width="12"/><circle cx="33" cy="42" r="4.5" fill="#0984e3"/><circle cx="67" cy="42" r="4.5" fill="#0984e3"/><path d="M 36 58 Q 50 72 64 58" fill="none" stroke="#0984e3" stroke-width="3.5" stroke-linecap="round"/></svg>'
-};
-
 function rc(i) {
   return { row: Math.floor((i - 1) / 5), col: (i - 1) % 5 };
 }
@@ -16,19 +11,18 @@ function getPieceStyle(symbol) {
   return localStorage.getItem("ffox_" + symbol.toLowerCase() + "PieceStyle") || "classic";
 }
 
-function getPieceImg(symbol, style) {
-  const map = {
+function pieceFile(symbol, style) {
+  const names = {
+    classic: { X: "classic-cross.svg", O: "classic-nought.svg" },
     dino: { X: "dino-cross.png", O: "dino-nought.png" },
     unicorn: { X: "unicorn-cross.png", O: "unicorn-nought.png" }
   };
-  const file = map[style][symbol];
-  return '<img class="cell-dino" src="img/' + file + '" alt="' + symbol + '">';
+  return "img/" + names[style][symbol];
 }
 
 function getPieceHtml(symbol) {
   const style = getPieceStyle(symbol);
-  if (style === "classic") return SVG[symbol];
-  return getPieceImg(symbol, style);
+  return '<img class="cell-dino" src="' + pieceFile(symbol, style) + '" alt="' + symbol + '">';
 }
 
 function getPlayerName(symbol) {
@@ -118,12 +112,8 @@ function checkDraw() {
 
 function playerIcon(symbol) {
   const style = getPieceStyle(symbol);
-  if (style === "classic") {
-    return '<span style="display:inline-flex;align-items:center;justify-content:center;width:1.6rem;height:1.6rem">' + SVG[symbol] + '</span>';
-  }
-  const map = { dino: "dino", unicorn: "unicorn" };
-  const file = map[style] + "-" + (symbol === "X" ? "cross" : "nought") + ".png";
-  return '<span style="display:inline-flex;align-items:center;justify-content:center;width:3rem;height:3rem"><img src="img/' + file + '" alt="' + symbol + '" style="width:100%;height:100%;object-fit:contain"></span>';
+  const size = style === "classic" ? "1.6rem" : "3rem";
+  return '<span style="display:inline-flex;align-items:center;justify-content:center;width:' + size + ';height:' + size + '"><img src="' + pieceFile(symbol, style) + '" alt="' + symbol + '" style="width:100%;height:100%;object-fit:contain"></span>';
 }
 
 function refreshPieces() {
